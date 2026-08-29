@@ -1,3 +1,29 @@
+# Jupyter
 .ipynb_checkpoints/
+
+# Virtual Environments
+venv/
+env/
+.env
+
+# Python Caches
+__pycache__/
+*.pyc
+
+# Weights & Biases Logs
+wandb/
+
+# Data (Too large for Git)
+src/data/raw/
+src/data/processed/
+*.csv
+*.txt
+
+# Saved Models (Can be large)
+src/models/saved/
+src/causal/results/*.pkl
+*.pkl
+
+# Miscellaneous
 test.py
 ai.py
