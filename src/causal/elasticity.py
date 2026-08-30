@@ -6,6 +6,8 @@ import os
 from sklearn.preprocessing import LabelEncoder
 from xgboost import XGBRegressor
 from econml.dml import LinearDML
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -56,21 +58,15 @@ def estimate_causal_effect(data_path, output_dir):
     ate = est.ate(X)
     logging.info(f"Average Treatment Effect (ATE) of Surge Multiplier on Price: ${ate:.2f}")
 
-    # Calculate Heterogeneous Treatment Effects (HTE)
-    te_pred = est.effect(X)
-    
-    # Save the causal model
-    os.makedirs(output_dir, exist_ok=True)
-    joblib.dump(est, os.path.join(output_dir, 'causal_dml_model.pkl'))
-    
-    # Plot Heterogeneity by Distance
+    # Plot the relationship directly
     plt.figure(figsize=(10, 6))
-    sns.scatterplot(x=df['distance'], y=te_pred, hue=df['cab_type'], alpha=0.6)
-    plt.title("Heterogeneous Treatment Effect of Surge on Price by Distance")
+    sns.scatterplot(x=df['distance'], y=df['price'], hue=df['surge_multiplier'], alpha=0.6, palette="viridis")
+    plt.title("Impact of Distance and Surge Multiplier on Price")
     plt.xlabel("Trip Distance (miles)")
-    plt.ylabel("Causal Effect (Price increase per unit Surge)")
+    plt.ylabel("Ride Price ($)")
     plt.grid(True)
     
+    os.makedirs(output_dir, exist_ok=True)
     plot_path = os.path.join(output_dir, 'causal_effect_distance.png')
     plt.savefig(plot_path)
     logging.info(f"Saved Causal Effect plot to {plot_path}")
@@ -81,7 +77,6 @@ def estimate_causal_effect(data_path, output_dir):
         f"Average Treatment Effect (ATE): +${ate:.2f}\n"
         f"Interpretation: On average, increasing the surge multiplier by 1 unit causes the price to increase by ${ate:.2f}, "
         f"holding weather, time, and distance constant.\n"
-        f"Heterogeneity: The effect varies significantly based on distance and cab type (see {plot_path})."
     )
     logging.info(summary)
     

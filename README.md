@@ -68,3 +68,36 @@ Execute the causal engine to calculate the Average Treatment Effect and generate
 ```bash
 python src/causal/elasticity.py
 ```
+
+5. **API & Optimization Engine**:
+Start the FastAPI server which exposes endpoints for price prediction and surge optimization.
+```bash
+uvicorn src.api.app:app --reload
+```
+Once running, visit `http://localhost:8000/docs` to interact with the API or test the optimizer via curl:
+```bash
+curl -X 'POST' \
+  'http://localhost:8000/optimize' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "distance": 2.5,
+  "cab_type": "Uber",
+  "name": "UberX",
+  "temp": 65.0,
+  "clouds": 0.5,
+  "pressure": 1012.0,
+  "rain": 0.0,
+  "humidity": 0.6,
+  "wind": 5.0,
+  "day_of_week": 2,
+  "hour_sin": 0.5,
+  "hour_cos": 0.8
+6. **Visual Dashboard (Streamlit)**:
+To see a beautiful, interactive web interface of the Pricing Optimizer, run the Streamlit dashboard:
+```bash
+streamlit run streamlit_app.py
+```
+This will open a browser window where you can adjust ride parameters with sliders and see the optimal surge multiplier calculated in real-time. 
+
+**Deployment**: This dashboard is designed to be easily hosted for free on [Streamlit Community Cloud](https://streamlit.io/cloud) by simply linking this GitHub repository!
