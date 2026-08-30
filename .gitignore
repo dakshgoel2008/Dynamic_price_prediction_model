@@ -18,9 +18,11 @@ src/data/raw/
 src/data/processed/
 *.csv
 *.txt
+!requirements.txt
 
 # Saved Models (Can be large)
 src/models/saved/
+!src/models/saved/*.pkl
 src/causal/results/*.pkl
 *.pkl
 
